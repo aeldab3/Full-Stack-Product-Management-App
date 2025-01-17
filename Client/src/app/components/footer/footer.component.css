@@ -1,0 +1,9 @@
+
+.nav .icon{
+  font-size: 1.5rem;
+  color: #6c757d;
+}
+
+.nav .icon:hover {
+  color: #0d6efd;
+}

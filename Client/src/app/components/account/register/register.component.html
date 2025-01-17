@@ -1,0 +1,136 @@
+<form
+  [formGroup]="userRegisterForm"
+  (ngSubmit)="onRegister()"
+  class="container"
+>
+  <h2 class="text-center">Register</h2>
+  <div class="mb-3">
+    <label for="userName" class="form-label">Name:</label>
+    <input
+      type="text"
+      name="name"
+      formControlName="name"
+      class="form-control"
+      id="userName"
+    />
+    <div class="text-danger" *ngIf="name?.invalid && name?.touched">
+      <p *ngIf="name?.errors?.['required']">The name is required</p>
+      <p *ngIf="name?.errors?.['pattern']">
+        The name must be between 3 and 30 characters and not contain special
+        characters
+      </p>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label for="userEmail" class="form-label">Email:</label>
+    <input
+      type="email"
+      name="email"
+      formControlName="email"
+      class="form-control"
+      id="userEmail"
+    />
+    <div
+      class="text-danger"
+      *ngIf="
+        userRegisterForm.get('email')?.invalid &&
+        userRegisterForm.get('email')?.touched
+      "
+    >
+      <p *ngIf="userRegisterForm.get('email')?.errors?.['required']">
+        The email is required
+      </p>
+      <p *ngIf="userRegisterForm.get('email')?.errors?.['email']">
+        The email is invalid
+      </p>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <div formArrayName="phoneNumbers">
+      <div
+        *ngFor="let phone of phones.controls; let i = index"
+        class="d-flex align-items-center mb-2"
+      >
+        <label for="phoneNumber{{ i }}" class="form-label me-2"
+          >Phone #{{ i + 1 }}:</label
+        >
+        <input
+          name="phoneNumbers"
+          type="text"
+          [formControlName]="i"
+          class="form-control me-2"
+          id="phoneNumber{{ i }}"
+        />
+        <button
+          *ngIf="i > 0"
+          (click)="removePhoneNum(i)"
+          class="btn btn-danger btn-sm"
+        >
+          -
+        </button>
+      </div>
+      <button
+        [disabled]="phones.length >= 2"
+        class="btn btn-primary mt-2"
+        (click)="addPhoneNum()"
+      >
+        +
+      </button>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label for="userPassword" class="form-label">Password:</label>
+    <input
+      type="password"
+      name="password"
+      formControlName="password"
+      class="form-control"
+      id="userPassword"
+    />
+    <div *ngIf="password?.touched && password?.errors" class="text-danger">
+      <p *ngIf="password?.errors?.['required']">Password is required.</p>
+      <p *ngIf="password?.errors?.['pattern']">
+        Password must contain at least 1 lowercase letter, 1 uppercase letter, 1
+        digit, 1 special character, and be at least 8 characters long.
+      </p>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label for="confirmPassword" class="form-label">Confirm Password:</label>
+    <input
+      type="password"
+      name="confirmPassword"
+      formControlName="confirmPassword"
+      class="form-control"
+      id="confirmPassword"
+    />
+    <span
+      *ngIf="password?.touched && confirmPassword?.errors?.['passwordMismatch']"
+      class="text-danger"
+    >
+      Passwords do not match.
+    </span>
+    <span
+      *ngIf="
+            confirmPassword?.dirty &&
+            !confirmPassword?.errors?.['passwordMismatch'] &&
+            password?.dirty
+          "
+      class="text-success"
+    >
+      Passwords match successfully!
+    </span>
+  </div>
+
+  <button
+    type="submit"
+    class="btn btn-success w-100"
+    [disabled]="userRegisterForm.invalid"
+  >
+    Submit
+  </button>
+</form>

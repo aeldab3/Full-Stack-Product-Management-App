@@ -1,0 +1,38 @@
+<div class="product-details-container">
+  <div class="product-image text-center">
+    <img
+      [src]="product?.imageUrl"
+      alt="{{ product?.name }}"
+      class="product-img"
+    />
+  </div>
+
+  <div class="product-info text-center mt-4">
+    <h1>Name: {{ product?.name }}</h1>
+    <h2>Price: {{ product?.price | currency : "EGP" }}</h2>
+    <p>{{ product?.description }}</p>
+  </div>
+
+  <!-- Navigation Buttons -->
+  <div class="d-flex justify-content-between my-4">
+    <button
+      class="btn btn-secondary"
+      [disabled]="id == idsArr[0]"
+      (click)="prev()"
+    >
+      Prev
+    </button>
+    <button
+      class="btn btn-primary"
+      [disabled]="id == idsArr[idsArr.length - 1]"
+      (click)="next()"
+    >
+      Next
+    </button>
+  </div>
+
+  <!-- Back Button -->
+  <div class="text-center my-3">
+    <button class="btn btn-primary" (click)="goBack()">Back</button>
+  </div>
+</div>

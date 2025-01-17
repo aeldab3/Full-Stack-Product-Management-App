@@ -1,0 +1,68 @@
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+  <div class="col" *ngFor="let product of filteredProducts; trackBy: trackItem">
+    <div
+      class="card h-100 shadow-sm rounded-3"
+      appHighlightCard="lightgray"
+      externalColor="lightblue"
+    >
+      <img
+        [src]="product.imageUrl"
+        class="card-img-top img-fluid rounded-top"
+        [alt]="product.name"
+        loading="lazy"
+      />
+      <div class="card-body d-flex flex-column">
+        <h5 class="card-title text-truncate">{{ product.name }}</h5>
+        <p class="card-text">{{ product.description }}</p>
+
+        <p class="card-text text-muted">
+          Price: {{ product.price | currency : "EGP" }}
+        </p>
+        <p class="card-text" *ngIf="product.quantity != 1; else lastItem">
+          Quantity: {{ product.quantity }}
+        </p>
+        <ng-template #lastItem>
+          <p class="card-text text-danger">Last Item</p>
+        </ng-template>
+        <input
+          type="number"
+          class="form-control my-2"
+          min="1"
+          #countInp
+          [defaultValue]="1"
+          placeholder="Enter quantity"
+        />
+        <div class="mt-auto d-grid gap-2">
+          <button
+            class="btn btn-primary"
+            [disabled]="product.quantity === 0"
+            (click)="
+              buy(countInp.value, product.price);
+              decrementQuantity(product, countInp.value)
+            "
+          >
+            Add to Cart
+          </button>
+          <button
+            class="btn btn-outline-secondary"
+            (click)="navigateToDetails(product._id, product.name)"
+          >
+            Details
+          </button>
+          <button
+            class="btn btn-outline-info"
+            (click)="navigateToUpdate(product._id, product.name)"
+          >
+            Edit
+          </button>
+          <button
+            class="btn btn-outline-danger"
+            (click)="deleteProduct(product._id)"
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,32 @@
+.home-container {
+  height: calc(100vh - 181px);
+  background: url(/assets/images/background6.png) no-repeat center center/cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.content {
+  text-align: center;
+  padding: 20px;
+  color: black;
+  text-shadow: 2px 2px 4px rgb(0, 0, 0);
+}
+
+.store-title {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.description {
+  font-size: 1.5rem;
+  margin-bottom: 30px;
+}
+
+.buttons .btn {
+  margin: 0 10px;
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  border-radius: 25px;
+}
