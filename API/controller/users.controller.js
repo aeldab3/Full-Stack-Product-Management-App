@@ -5,6 +5,7 @@ const userSchema = require("../validators/userValidator");
 const asyncWrapper = require("../middlewares/asyncWrapper");
 const bcrypt = require("bcrypt");
 const generateJWT = require("../utils/generateJWT");
+const tokenBlacklist = require("../utils/tokenBlacklist");
 
 const getAllUsers = asyncWrapper(
     async (req, res, next) => {
@@ -95,6 +96,8 @@ const login = asyncWrapper(
 
 const logout = asyncWrapper(
     async (req, res, next) => {
+        const token = req.headers.authorization.split(' ')[1];
+        tokenBlacklist.add(token);
         req.currentUser = null;
         return res.json({status: httpStatusText.SUCCESS, data: null});
 });

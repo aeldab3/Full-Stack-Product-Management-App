@@ -3,14 +3,17 @@ const httpStatusText = require("../utils/httpStatusText");
 const AppError = require("../utils/appError");
 const productSchema = require("../validators/productValidator");
 const asyncWrapper = require("../middlewares/asyncWrapper");
-
+const Categories = require("../model/category.model");
 const getAllProducts = asyncWrapper(
     async (req, res, next) => {
         const query = req.query;
         const limit = query.limit || 5;
         const page = query.page || 1;
         const skip = (page - 1) * limit;
-        const products = await Products.find({}, {"__v": 0}).limit(limit).skip(skip);
+
+        const filter = catId ? { catId } : {};
+
+        const products = await Products.find(filter, {"__v": 0}).limit(limit).skip(skip);
         res.json({status: httpStatusText.SUCCESS, data: {products}});
 });
 
@@ -30,6 +33,13 @@ const createProduct = asyncWrapper(
         if (error) {
             return next(new AppError(error.message, 400, httpStatusText.FAIL));
         }
+
+        // Check if the category exists
+        const categoryExists = await Categories.findById(req.body.catId);
+        if (!categoryExists) {
+            return next(new AppError("Category not found", 404, httpStatusText.FAIL));
+        }
+
         const newProduct = new Products(req.body);
         await newProduct.save();
         return res.status(201).json({status: httpStatusText.SUCCESS, data: {product: newProduct}});
