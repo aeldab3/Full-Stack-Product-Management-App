@@ -6,6 +6,7 @@ const asyncWrapper = require("../middlewares/asyncWrapper");
 const bcrypt = require("bcrypt");
 const generateJWT = require("../utils/generateJWT");
 const tokenBlacklist = require("../utils/tokenBlacklist");
+const userUpdateValidator = require("../validators/userUpdateValidator");
 
 const getAllUsers = asyncWrapper(
     async (req, res, next) => {
@@ -16,6 +17,33 @@ const getAllUsers = asyncWrapper(
         
         const users = await Users.find({}, {"__v": 0, "password": 0}).limit(limit).skip(skip);
         return res.json({status: httpStatusText.SUCCESS, data: {users}});
+    }
+);
+
+const updateUser = asyncWrapper(
+    async (req, res, next) => {
+        if (req.currentUser.id !== req.params.id) {
+            return next(new AppError("You are not authorized to update this user", 403));
+        }
+        const { error } = userUpdateValidator.validate(req.body);
+        if (error) {
+            return next(new AppError(error.message, 400, httpStatusText.FAIL));
+        }
+        const updateData = {...req.body};
+
+        if (req.body.password) {
+            const saltRounds = 10;
+            const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
+            updateData.password = hashedPassword;
+        }
+
+        const user = await Users.findById(req.params.id);
+        if (!user) {
+            return next(new AppError("User not found", 404, httpStatusText.FAIL));
+        }
+        const updatedUser = await Users.findByIdAndUpdate(req.params.id, {$set: updateData}, {new: true});
+
+        return res.json({status: httpStatusText.SUCCESS, data: {user: updatedUser}});
     }
 );
 
@@ -69,7 +97,7 @@ const register = asyncWrapper(
             role,
             phones,
         });
-        const token = await generateJWT({ id: user._id, email: user.email, role: user.role})
+        const token = await generateJWT({ id: user._id, email: user.email, phones: user.phones, role: user.role})
         user.token = token;
 
         return res.status(201).json({status: httpStatusText.SUCCESS, data: {user}});
@@ -105,6 +133,7 @@ const logout = asyncWrapper(
 module.exports = {
     getAllUsers,
     getUserById,
+    updateUser,
     deleteUser,
     register,
     login,

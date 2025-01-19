@@ -10,6 +10,7 @@ Router.route("/")
 
 Router.route("/:id")
     .get(authorizeToken, userController.getUserById)
+    .patch(authorizeToken, userController.updateUser)
     .delete(authorizeToken, allowedTo(userRole.MANAGER), userController.deleteUser);
 
 Router.route("/register")

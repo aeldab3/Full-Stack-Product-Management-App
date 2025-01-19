@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const app = express();
 const cors = require("cors");
 const errorHandler = require("./middlewares/errorHandler");
+const path = require("path");
 require("dotenv").config();
 
 const url = process.env.DATABASE_URL;
@@ -15,6 +16,9 @@ app.use(cors({
     origin: 'http://localhost:4200'
 }));
 app.use(express.json());
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 
 const productRouter = require("./routes/product.route");
 const userRouter = require("./routes/user.route");

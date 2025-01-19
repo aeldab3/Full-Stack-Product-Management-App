@@ -1,3 +1,4 @@
+import { UserAuthService } from './../../../services/user-auth.service';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import {
@@ -19,7 +20,11 @@ import { Router } from '@angular/router';
 export class RegisterComponent {
   userRegisterForm: FormGroup;
   errorMessage: string | null = null;
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private _userAuthService: UserAuthService
+  ) {
     this.userRegisterForm = fb.group({
       name: [
         '',
@@ -53,12 +58,33 @@ export class RegisterComponent {
     const { name, email, phoneNumbers, password, confirmPassword } =
       this.userRegisterForm.value;
 
-    if (password !== confirmPassword) {
+    if (password !== this.userRegisterForm.value.confirmPassword) {
       this.errorMessage = 'Passwords do not match.';
       return;
     }
-    alert('Registration successful!');
-    this.router.navigate(['/login']);
+    this._userAuthService
+      .register({
+        name,
+        email,
+        phones: phoneNumbers,
+        password,
+        confirmPassword,
+        role: 'user',
+      })
+      .subscribe(
+        (success) => {
+          if (success) {
+            alert('Registration successful!');
+            this.router.navigate(['/login']);
+          } else {
+            this.errorMessage = 'Registration failed. Please try again.';
+          }
+        },
+        (error) => {
+          this.errorMessage =
+            error.message || 'Registration failed. Please try again.';
+        }
+      );
   }
   get name() {
     return this.userRegisterForm.get('name');
