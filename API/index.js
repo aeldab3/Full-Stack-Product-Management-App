@@ -26,6 +26,10 @@ const userRouter = require("./routes/user.route");
 app.use("/api/products", productRouter);
 app.use("/api/users", userRouter);
 
+app.use('*', (req, res, next) => {
+    return res.status(404).json({status: httpStatusText.ERROR, data: null, message: "This route is not found"});
+});
+
 app.use(errorHandler);
 
 app.listen(process.env.PORT, () => {
