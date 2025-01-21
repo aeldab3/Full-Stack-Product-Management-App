@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-root',
-  standalone: true, // Mark as standalone
+  standalone: true,
   imports: [
     FormsModule,
     CommonModule,

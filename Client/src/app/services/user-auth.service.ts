@@ -14,7 +14,7 @@ export class UserAuthService {
 
   login(email: string, password: string): Observable<boolean> {
     return this.http
-      .post<{ status: string; data: { token: string } }>(
+      .post<{ status: string; data: { token: string; role: string } }>(
         `${environment.baseUrl}/users/login`,
         {
           email,
@@ -43,18 +43,20 @@ export class UserAuthService {
     confirmPassword: string;
     role: string;
   }): Observable<boolean> {
-    return this.http.post<{ status: string; data: { user: any } }>(
-      `${environment.baseUrl}/users/register`,
-      userData
-    ).pipe(
-      tap((response) => {
-        if (response.status === 'SUCCESS') {
-          alert('Registration successful!');
-        }
-      }),
-      map(() => true),
-      catchError(() => of(false))
-    );
+    return this.http
+      .post<{ status: string; data: { user: any } }>(
+        `${environment.baseUrl}/users/register`,
+        userData
+      )
+      .pipe(
+        tap((response) => {
+          if (response.status === 'SUCCESS') {
+            alert('Registration successful!');
+          }
+        }),
+        map(() => true),
+        catchError(() => of(false))
+      );
   }
   logout() {
     localStorage.removeItem('token');
@@ -67,11 +69,11 @@ export class UserAuthService {
     }
     return false;
   }
-  getToken() {
+  getToken(): string | null {
     if (typeof localStorage !== 'undefined') {
-      return localStorage.getItem('token') ? localStorage.getItem('token') : '';
+      return localStorage.getItem('token');
     }
-    return '';
+    return null;
   }
 
   getAuthSubject(): BehaviorSubject<boolean> {

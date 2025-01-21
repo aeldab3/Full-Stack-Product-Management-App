@@ -1,6 +1,7 @@
 .product-details-container {
   max-width: 800px;
   margin: 80px auto;
+  height: 720px;
   padding: 20px;
   background: #f9f9f9;
   border-radius: 8px;
@@ -9,11 +10,11 @@
 
 .product-image img {
   max-width: 100%;
-  height: auto;
+  height: 24vh;
   border-radius: 8px;
 }
 
-.product-info h1, .product-info h2 {
+.product-info h1, .product-info h3 {
   margin: 10px 0;
   font-weight: bold;
 }

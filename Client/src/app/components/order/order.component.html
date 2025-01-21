@@ -1,14 +1,24 @@
-<input type="text" #userNameInp name="" id="">
+<input type="text" #userNameInp name="" id="" />
 <div class="mb-3">
   <label for="categories" class="form-label">Categories</label>
-  <select class="form-select form-select-lg" name="categories" id="categories" [(ngModel)]="selectedCatId">
-    <option selected value='0'>All</option>
-    <option *ngFor="let cat of categories" [value]="cat.id">{{cat.name}}</option>
+  <select
+    class="form-select form-select-lg"
+    name="categories"
+    id="categories"
+    [(ngModel)]="selectedCatId"
+  >
+    <option selected value="0">All</option>
+    <option *ngFor="let cat of categories" [value]="cat._id">
+      {{ cat.name }}
+    </option>
   </select>
 </div>
 
 <div class="my-5">
-  <app-products [receivedCatId]="selectedCatId" (onTotalPriceChanged)="calcTotalPrice($event)">
+  <app-products
+    [receivedCatId]="selectedCatId"
+    (onTotalPriceChanged)="calcTotalPrice($event)"
+  >
   </app-products>
 </div>
-{{receivedTotalPrice | currency:'EGP'}}
+{{ receivedTotalPrice | currency : "EGP" }}

@@ -18,9 +18,9 @@ export class OrderComponent implements AfterViewInit {
   @ViewChild('userNameInp') myInp!: ElementRef;
   constructor() {
     this.categories = [
-      { id: '1', name: 'Laptop' },
-      { id: '2', name: 'Mobile' },
-      { id: '3', name: 'Tablet' },
+      { _id: '1', name: 'Laptop' },
+      { _id: '2', name: 'Mobile' },
+      { _id: '3', name: 'Tablet' },
     ];
   }
   ngAfterViewInit(): void {

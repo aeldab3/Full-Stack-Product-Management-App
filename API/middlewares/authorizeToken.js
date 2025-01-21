@@ -13,12 +13,12 @@ const authorizeToken = (req, res, next) => {
         if (tokenBlacklist.has(token)) {
             return next(new AppError("Token invalidated please login again", 401, httpStatusText.FAIL));
         }
-
         const currentUser = jwt.verify(token, process.env.JWT_SECRET_KEY);
         req.currentUser = currentUser;
         next();
     }
     catch (e) {
+
         return next(new AppError("Invalid token", 401, httpStatusText.ERROR));
     }
 }

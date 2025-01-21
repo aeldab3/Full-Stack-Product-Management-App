@@ -5,19 +5,16 @@ import {
   OnChanges,
   OnInit,
   Output,
-  SimpleChanges,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IProduct } from '../../models/iproduct';
-import { HighlightCardDirective } from '../../directives/highlight-card.directive';
-import { StaticProductsService } from '../../services/static-products.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ApiProductsService } from '../../services/api-products.service';
 
 @Component({
   selector: 'app-products',
-  imports: [FormsModule, CommonModule, HighlightCardDirective],
+  imports: [FormsModule, CommonModule],
   standalone: true,
   templateUrl: './products.component.html',
   styleUrl: './products.component.css',
@@ -26,53 +23,79 @@ export class ProductsComponent implements OnChanges, OnInit {
   products: IProduct[] = [] as IProduct[];
   filteredProducts: IProduct[];
   totalOrderPrice: number = 0;
+  currentPage: number = 1;
+  totalPages: number = 1;
+  limit: number = 12;
 
   @Input() receivedCatId: string = '';
   @Output() onTotalPriceChanged: EventEmitter<number>;
   constructor(
-    private _StaticProductsService: StaticProductsService,
     private router: Router,
+    private route: ActivatedRoute,
     private _apiProductsService: ApiProductsService
   ) {
-    // this.products = this._StaticProductsService.getAllProducts();
     this.filteredProducts = this.products;
     this.onTotalPriceChanged = new EventEmitter<number>();
   }
-  ngOnInit(): void {
-    this._apiProductsService.getAllProducts().subscribe({
-      next: (data) => {
-        this.products = data;
-        this.filteredProducts = this.products;
+    ngOnInit(): void {
+      this.route.queryParams.subscribe((params) => {
+        this.currentPage = params['page'] ? +params['page'] : 1; // Read the page from the URL
+        this.fetchProducts();
+      });
+    }
+  ngOnChanges() {
+    this.fetchProducts();
+  }
+
+  fetchProducts() {
+    const queryParams = {
+      limit: this.limit,
+      page: this.currentPage,
+      catId: this.receivedCatId || '',
+    };
+
+    this._apiProductsService.getAllProducts(queryParams).subscribe({
+      next: (res: any) => {
+        console.log('Backend Response:', res); // Log the response
+
+        if (res && res.data && res.data.products) {
+          this.products = res.data.products; // Assign the products array
+          this.filteredProducts = this.products;
+
+          // Assign pagination metadata
+          this.totalPages = res.data.totalPages || 1;
+          this.currentPage = res.data.currentPage || 1;
+        } else {
+          console.error('Invalid response structure:', res);
+          this.products = [];
+          this.filteredProducts = [];
+          this.totalPages = 1;
+          this.currentPage = 1;
+        }
       },
       error: (err) => {
-        console.error(err.message);
+        console.error('Error fetching products:', err.message);
       },
     });
   }
-  ngOnChanges() {
-    if (this.receivedCatId == '') {
-      this._apiProductsService.getAllProducts().subscribe({
-        next: (data) => {
-          this.filteredProducts = data;
-        },
-        error: (err) => {
-          console.error(err.message);
-        },
-      });
-    } else {
-      this._apiProductsService.getProductByCatId(this.receivedCatId).subscribe({
-        next: (res) => {
-          this.filteredProducts = res;
-        },
-        error: (err) => {
-          console.error(err.message);
-        },
-      });
-    }
+  goToPage(page: number) {
+    if (page < 1 || page > this.totalPages) return; // Prevent invalid page navigation
+    this.currentPage = page;
+    // Update the URL with the new page number
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { page: this.currentPage },
+      queryParamsHandling: 'merge', // Preserve other query parameters
+    });
+
+    // Fetch products for the new page
+    this.fetchProducts();
   }
+
   trackItem(index: number, product: IProduct) {
     return product._id;
   }
+
   buy(count: string, price: number) {
     this.totalOrderPrice += parseInt(count) * price;
     this.onTotalPriceChanged.emit(this.totalOrderPrice);
@@ -102,10 +125,10 @@ export class ProductsComponent implements OnChanges, OnInit {
       },
     });
   }
-  navigateToDetails(id: string, name: string) {
-    this.router.navigateByUrl(`/details/${id}/${name}`);
+  navigateToDetails(id: string) {
+    this.router.navigateByUrl(`/details/${id}`);
   }
-  navigateToUpdate(id: string, name: string) {
-    this.router.navigateByUrl(`/update-product/${id}/${name}`);
+  navigateToUpdate(id: string) {
+    this.router.navigateByUrl(`/update-product/${id}`);
   }
 }

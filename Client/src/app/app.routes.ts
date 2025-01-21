@@ -14,7 +14,7 @@ import { OrderComponent } from './components/order/order.component';
 import { RegisterComponent } from './components/account/register/register.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full' }, // Default route
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
   { path: 'order', component: OrderComponent },
   {
@@ -25,7 +25,7 @@ export const routes: Routes = [
       ),
     canActivate: [authGuard],
   },
-  { path: 'details/:id/:name', component: DetailsComponent },
+  { path: 'details/:id', component: DetailsComponent },
   {
     path: 'about',
     component: AboutUsComponent,
@@ -42,6 +42,6 @@ export const routes: Routes = [
     component: AddProductComponent,
     canActivate: [authGuard],
   },
-  { path: 'update-product/:id/:name', component: UpdateProductComponent },
+  { path: 'update-product/:id', component: UpdateProductComponent },
   { path: '**', component: NotFoundComponent },
 ];

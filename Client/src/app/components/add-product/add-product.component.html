@@ -1,6 +1,12 @@
 <div class="form-container">
   <h1 class="mt-5">Add New Product</h1>
-  <form [formGroup]="addProductForm" (ngSubmit)="addNewProduct()">
+  <form
+    [formGroup]="addProductForm"
+    (ngSubmit)="addNewProduct()"
+    action="/upload"
+    method="POST"
+    enctype="multipart/form-data"
+  >
     <div class="mb-3">
       <label for="productName" class="form-label">Name:</label>
       <input
@@ -20,7 +26,7 @@
           The name is required
         </p>
         <p *ngIf="addProductForm.get('name')?.errors?.['pattern']">
-          The name must be between 3 and 30 characters
+          The name must be between 3 and 50 characters
         </p>
       </div>
     </div>
@@ -46,19 +52,9 @@
     </div>
 
     <div class="mb-3">
-      <label for="productImage" class="form-label">Image:</label>
-      <input
-        type="file"
-        id="productImage"
-        class="form-control"
-        formControlName="imageUrl"
-      />
-    </div>
-
-    <div class="mb-3">
-      <label for="productCategory" class="form-label">Category:</label>
-      <select id="productCategory" class="form-select" formControlName="catId">
-        <option *ngFor="let cat of categories" [value]="cat.id">
+      <label for="catId" class="form-label">Category:</label>
+      <select id="catId" class="form-select" formControlName="catId">
+        <option *ngFor="let cat of categories" [value]="cat._id">
           {{ cat.name }}
         </option>
       </select>
@@ -82,6 +78,17 @@
           The description cannot exceed 200 characters
         </p>
       </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="productImage" class="form-label">Image:</label>
+      <input
+        type="file"
+        id="productImage"
+        class="form-control"
+        formControlName="imageUrl"
+        accept="image/*"
+      />
     </div>
 
     <button

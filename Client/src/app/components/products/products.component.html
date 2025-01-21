@@ -1,23 +1,56 @@
-<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mt-5">
   <div class="col" *ngFor="let product of filteredProducts; trackBy: trackItem">
-    <div
-      class="card h-100 shadow-sm rounded-3"
-      appHighlightCard="lightgray"
-      externalColor="lightblue"
-    >
-      <img
-        [src]="product.imageUrl"
-        class="card-img-top img-fluid rounded-top"
-        [alt]="product.name"
-        loading="lazy"
-      />
+    <div class="card h-100 shadow-sm">
+      <!-- Product Image -->
+      <div
+        class="image position-relative"
+        style="cursor: pointer"
+        (click)="navigateToDetails(product._id)"
+      >
+        <img
+          [src]="product.imageUrl"
+          alt="{{ product.name }}"
+          class="img-fluid bg-light"
+        />
+        <!-- Hover Overlay with Buttons -->
+        <div
+          class="d-flex justify-content-center align-items-center hover-overlay"
+        >
+          <!-- Add to Cart Button -->
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="
+              $event.stopPropagation();
+              buy(countInp.value, product.price);
+              decrementQuantity(product, countInp.value)
+            "
+            [disabled]="product.quantity === 0"
+          >
+            <i class="fas fa-shopping-cart"></i>
+          </button>
+          <!-- View Details Button -->
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="navigateToDetails(product._id)"
+          >
+            View
+          </button>
+        </div>
+      </div>
+      <!-- Card Body -->
       <div class="card-body d-flex flex-column">
-        <h5 class="card-title text-truncate">{{ product.name }}</h5>
-        <p class="card-text">{{ product.description }}</p>
-
-        <p class="card-text text-muted">
-          Price: {{ product.price | currency : "EGP" }}
-        </p>
+        <h6
+          class="text-uppercase"
+          style="cursor: pointer"
+          (click)="navigateToDetails(product._id)"
+        >
+          {{ product.name }}
+        </h6>
+        <span class="mb-2">
+          <strong>{{ product.price | currency : "EGP" }}</strong>
+        </span>
         <p class="card-text" *ngIf="product.quantity != 1; else lastItem">
           Quantity: {{ product.quantity }}
         </p>
@@ -32,37 +65,44 @@
           [defaultValue]="1"
           placeholder="Enter quantity"
         />
-        <div class="mt-auto d-grid gap-2">
+        <div class="d-flex justify-content-between mt-auto">
           <button
-            class="btn btn-primary"
-            [disabled]="product.quantity === 0"
-            (click)="
-              buy(countInp.value, product.price);
-              decrementQuantity(product, countInp.value)
-            "
+            class="btn btn-outline-primary btn-sm"
+            (click)="navigateToUpdate(product._id)"
           >
-            Add to Cart
+            <i class="fas fa-edit"></i>
+            <!-- Edit Icon -->
           </button>
           <button
-            class="btn btn-outline-secondary"
-            (click)="navigateToDetails(product._id, product.name)"
-          >
-            Details
-          </button>
-          <button
-            class="btn btn-outline-info"
-            (click)="navigateToUpdate(product._id, product.name)"
-          >
-            Edit
-          </button>
-          <button
-            class="btn btn-outline-danger"
+            class="btn btn-outline-danger btn-sm"
             (click)="deleteProduct(product._id)"
           >
-            Delete
+            <i class="fas fa-trash-alt"></i>
+            <!-- Delete Icon -->
           </button>
         </div>
       </div>
     </div>
   </div>
+</div>
+
+<!-- Pagination Buttons -->
+<div class="pagination d-flex justify-content-center mt-4">
+  <button
+    class="btn btn-primary me-2"
+    (click)="goToPage(currentPage - 1)"
+    [disabled]="currentPage === 1"
+  >
+    <i class="fa-solid fa-arrow-left"></i>
+  </button>
+  <span class="mx-2 align-self-center"
+    >Page {{ currentPage }} of {{ totalPages }}</span
+  >
+  <button
+    class="btn btn-primary"
+    (click)="goToPage(currentPage + 1)"
+    [disabled]="currentPage === totalPages"
+  >
+    <i class="fa-solid fa-arrow-right"></i>
+  </button>
 </div>

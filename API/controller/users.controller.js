@@ -118,7 +118,7 @@ const login = asyncWrapper(
             return next(new AppError("Invalid password", 401, httpStatusText.FAIL));
         }
         const token = await generateJWT({ id: user._id, email: user.email, role: user.role})
-        return res.json({status: httpStatusText.SUCCESS, data: {token}});
+        return res.json({status: httpStatusText.SUCCESS, data: {token, role: user.role}});
     }
 )
 

@@ -10,9 +10,14 @@ Router.route("/")
     .get(authorizeToken, productController.getAllProducts)
     .post(authorizeToken, allowedTo(userRole.MANAGER, userRole.ADMIN), upload.single("imageUrl"), productController.createProduct);
 
+Router.route("/categories")
+        .get(authorizeToken, productController.gatAllCategories);
+
 Router.route("/:id")
     .get(authorizeToken, productController.getProductById)
-    .patch(authorizeToken, allowedTo(userRole.MANAGER, userRole.ADMIN), productController.updateProduct)
+    .patch(authorizeToken, allowedTo(userRole.MANAGER, userRole.ADMIN), upload.single("imageUrl"), productController.updateProduct)
     .delete(authorizeToken, allowedTo(userRole.MANAGER, userRole.ADMIN), productController.deleteProduct);
+
+
 
 module.exports = Router

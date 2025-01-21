@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { StaticProductsService } from '../../services/static-products.service';
 import { IProduct } from '../../models/iproduct';
 import { CommonModule, Location } from '@angular/common';
 import { ApiProductsService } from '../../services/api-products.service';
@@ -15,16 +14,21 @@ export class DetailsComponent implements OnInit {
   id!: string;
   name!: string;
   product: IProduct | null = null;
-  idsArr: string[];
+  idsArr!: string[];
   currentIdIndex: number = 0;
   constructor(
     private _activatedRoute: ActivatedRoute,
-    private _StaticProductsService: StaticProductsService,
     private _location: Location,
     private _router: Router,
     private _apiProductsService: ApiProductsService
   ) {
-    this.idsArr = this._StaticProductsService.mapProductsToIds();
+    const queryParams = { limit: 10000000, page: 1 };
+    this._apiProductsService.getAllProducts(queryParams).subscribe({
+      next: (res: any) => {
+        this.idsArr = res.map((product: IProduct) => product._id);
+      },
+      error: (err) => console.error(err.message),
+    });
   }
   ngOnInit(): void {
     this._activatedRoute.paramMap.subscribe((params) => {
@@ -46,26 +50,14 @@ export class DetailsComponent implements OnInit {
     this.currentIdIndex = this.idsArr.findIndex((id) => id == this.id);
     if (this.currentIdIndex != this.idsArr.length - 1) {
       const nextProductId = this.idsArr[this.currentIdIndex + 1];
-      const nextProductName =
-        this._StaticProductsService
-          .getProductById(nextProductId)
-          ?.name.toLowerCase() || '';
-      this._router.navigateByUrl(
-        `/details/${nextProductId}/${nextProductName}`
-      );
+      this._router.navigateByUrl(`/details/${nextProductId}`);
     }
   }
   prev() {
     this.currentIdIndex = this.idsArr.findIndex((id) => id == this.id);
     if (this.currentIdIndex != 0) {
       const prevProductId = this.idsArr[this.currentIdIndex - 1];
-      const prevProductName =
-        this._StaticProductsService
-          .getProductById(prevProductId)
-          ?.name.toLowerCase() || '';
-      this._router.navigateByUrl(
-        `/details/${prevProductId}/${prevProductName}`
-      );
+      this._router.navigateByUrl(`/details/${prevProductId}`);
     }
   }
 }

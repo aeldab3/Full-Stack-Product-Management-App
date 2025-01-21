@@ -4,13 +4,13 @@
     [formGroup]="updateProductForm"
     (ngSubmit)="updateProduct()"
     class="mt-5"
+    enctype="multipart/form-data"
   >
     <div class="mb-3">
       <label for="productName" class="form-label">Name:</label>
       <input
         type="text"
         id="productName"
-        name="productName"
         class="form-control"
         formControlName="name"
       />
@@ -25,7 +25,7 @@
           The name is required
         </p>
         <p *ngIf="updateProductForm.get('name')?.errors?.['pattern']">
-          The name must be between 3 and 30 characters
+          The name must be between 3 and 50 characters
         </p>
       </div>
     </div>
@@ -35,7 +35,6 @@
       <input
         type="number"
         id="productPrice"
-        name="productPrice"
         class="form-control"
         formControlName="price"
       />
@@ -45,26 +44,24 @@
           updateProductForm.get('price')?.invalid &&
           updateProductForm.get('price')?.touched
         "
-      >
-      </span>
+      ></span>
     </div>
+
     <div class="mb-3">
       <label for="productDescription" class="form-label">Description:</label>
       <input
         type="text"
         id="productDescription"
-        name="productDescription"
         class="form-control"
         formControlName="description"
       />
       <span
         class="text-danger"
         *ngIf="
-          updateProductForm.get('price')?.invalid &&
-          updateProductForm.get('price')?.touched
+          updateProductForm.get('description')?.invalid &&
+          updateProductForm.get('description')?.touched
         "
-      >
-      </span>
+      ></span>
     </div>
 
     <div class="mb-3">
@@ -72,27 +69,25 @@
       <input
         type="number"
         id="productQuantity"
-        name="productQuantity"
         class="form-control"
         formControlName="quantity"
       />
     </div>
 
     <div class="mb-3">
-      <label for="productImage" class="form-label">Image URL:</label>
+      <label for="productImage" class="form-label">Image:</label>
       <input
-        type="text"
+        type="file"
         id="productImage"
-        name="productImage"
         class="form-control"
-        formControlName="imageUrl"
+        accept="image/*"
       />
     </div>
 
     <div class="mb-3">
       <label for="productCategory" class="form-label">Category:</label>
       <select id="productCategory" class="form-select" formControlName="catId">
-        <option *ngFor="let cat of categories" [value]="cat.id">
+        <option *ngFor="let cat of categories" [value]="cat._id">
           {{ cat.name }}
         </option>
       </select>

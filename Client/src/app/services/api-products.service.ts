@@ -4,6 +4,7 @@ import { map, Observable } from 'rxjs';
 import { IProduct } from '../models/iproduct';
 import { environment } from '../../environments/environment.development';
 import { UserAuthService } from './user-auth.service';
+import { Icategory } from '../models/icategory';
 
 @Injectable({
   providedIn: 'root',
@@ -14,75 +15,56 @@ export class ApiProductsService {
     private _UserAuthService: UserAuthService
   ) {}
 
-  getAllProducts(): Observable<IProduct[]> {
-    return this.httpClient
-      .get<{ data: { products: IProduct[] } }>(
-        `${environment.baseUrl}/products`,
-        {
-          headers: new HttpHeaders({
-            Authorization: `Bearer ${this._UserAuthService.getToken()}`,
-          }),
-        }
-      )
-      .pipe(map((res) => res.data.products));
+  getAllProducts(queryParams: any): Observable<any> {
+    return this.httpClient.get<any>(`${environment.baseUrl}/products`, {
+      params: queryParams,
+    });
   }
+
   getProductById(id: string): Observable<IProduct> {
-    const token = this._UserAuthService.getToken();
-    return this.httpClient.get<IProduct>(
-      `${environment.baseUrl}/products/${id}`,
-      {
-        headers: new HttpHeaders({
-          Authorization: `Bearer ${token}`,
-        }),
-      }
+    return this.httpClient
+      .get<{ data: { product: IProduct } }>(
+        `${environment.baseUrl}/products/${id}`
+      )
+      .pipe(map((res) => res.data.product));
+  }
+
+  getCategories(): Observable<any> {
+    return this.httpClient.get<{ data: { categories: any } }>(
+      `${environment.baseUrl}/products/categories`
     );
   }
+
   getProductByCatId(catId: string): Observable<IProduct[]> {
     let searchString = new HttpParams();
-    const token = this._UserAuthService.getToken();
     searchString = searchString.append('catId', catId);
     return this.httpClient.get<IProduct[]>(`${environment.baseUrl}/products`, {
       params: searchString,
-      headers: new HttpHeaders({
-        Authorization: `Bearer ${token}`,
-      }),
     });
   }
-  addProduct(product: IProduct): Observable<IProduct> {
-    const token = this._UserAuthService.getToken();
-    return this.httpClient.post<IProduct>(
-      `${environment.baseUrl}/products`,
-      product,
-      {
-        headers: new HttpHeaders({
-          Authorization: `Bearer ${token}`,
-        }),
-      }
-    );
+  addProduct(product: FormData): Observable<IProduct> {
+    return this.httpClient
+      .post<{ data: { product: IProduct } }>(
+        `${environment.baseUrl}/products`,
+        product
+      )
+      .pipe(map((res) => res.data.product));
   }
-  updateProduct(product: IProduct): Observable<IProduct> {
-    const token = this._UserAuthService.getToken();
-    return this.httpClient.patch<IProduct>(
-      `${environment.baseUrl}/products/${product._id}`,
-      product,
-      {
-        headers: new HttpHeaders({
-          Authorization: `Bearer ${token}`,
-        }),
-      }
-    );
+  updateProduct(
+    productId: string,
+    updatedProduct: FormData
+  ): Observable<IProduct> {
+    return this.httpClient
+      .patch<{ data: { product: IProduct } }>(
+        `${environment.baseUrl}/products/${productId}`,
+        updatedProduct
+      )
+      .pipe(map((res) => res.data.product));
   }
 
   deleteProduct(id: string): Observable<IProduct> {
-    const token = this._UserAuthService.getToken();
     return this.httpClient.delete<IProduct>(
-      `${environment.baseUrl}/products/${id}`,
-
-      {
-        headers: new HttpHeaders({
-          Authorization: `Bearer ${token}`,
-        }),
-      }
+      `${environment.baseUrl}/products/${id}`
     );
   }
 }
