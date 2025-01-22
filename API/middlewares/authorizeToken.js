@@ -18,7 +18,6 @@ const authorizeToken = (req, res, next) => {
         next();
     }
     catch (e) {
-
         return next(new AppError("Invalid token", 401, httpStatusText.ERROR));
     }
 }

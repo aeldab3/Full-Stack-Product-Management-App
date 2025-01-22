@@ -16,8 +16,14 @@ export class ApiProductsService {
   ) {}
 
   getAllProducts(queryParams: any): Observable<any> {
+    let params = new HttpParams();
+    for (const key in queryParams) {
+      if (queryParams[key]) {
+        params = params.append(key, queryParams[key]);
+      }
+    }
     return this.httpClient.get<any>(`${environment.baseUrl}/products`, {
-      params: queryParams,
+      params,
     });
   }
 

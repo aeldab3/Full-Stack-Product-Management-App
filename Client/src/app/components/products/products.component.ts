@@ -5,6 +5,7 @@ import {
   OnChanges,
   OnInit,
   Output,
+  SimpleChanges,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -27,7 +28,8 @@ export class ProductsComponent implements OnChanges, OnInit {
   totalPages: number = 1;
   limit: number = 12;
 
-  @Input() receivedCatId: string = '';
+  @Input() receivedCatId: string = '0';
+  @Input() searchTerm: string = '';
   @Output() onTotalPriceChanged: EventEmitter<number>;
   constructor(
     private router: Router,
@@ -37,32 +39,33 @@ export class ProductsComponent implements OnChanges, OnInit {
     this.filteredProducts = this.products;
     this.onTotalPriceChanged = new EventEmitter<number>();
   }
-    ngOnInit(): void {
-      this.route.queryParams.subscribe((params) => {
-        this.currentPage = params['page'] ? +params['page'] : 1; // Read the page from the URL
-        this.fetchProducts();
-      });
+  ngOnInit(): void {
+    this.route.queryParams.subscribe((params) => {
+      this.currentPage = params['page'] ? +params['page'] : 1; // Read the page from the URL
+      this.fetchProducts();
+    });
+  }
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['receivedCatId'] || changes['searchTerm']) {
+      this.fetchProducts();
     }
-  ngOnChanges() {
-    this.fetchProducts();
   }
 
-  fetchProducts() {
+  fetchProducts(): void {
     const queryParams = {
       limit: this.limit,
       page: this.currentPage,
-      catId: this.receivedCatId || '',
+      catId: this.receivedCatId === '0' ? '' : this.receivedCatId, // Send empty string for "All"
+      search: this.searchTerm, // Include search term in the query
     };
+
+    console.log('Query Params:', queryParams); // Log the query parameters
 
     this._apiProductsService.getAllProducts(queryParams).subscribe({
       next: (res: any) => {
-        console.log('Backend Response:', res); // Log the response
-
         if (res && res.data && res.data.products) {
-          this.products = res.data.products; // Assign the products array
+          this.products = res.data.products;
           this.filteredProducts = this.products;
-
-          // Assign pagination metadata
           this.totalPages = res.data.totalPages || 1;
           this.currentPage = res.data.currentPage || 1;
         } else {
@@ -87,8 +90,6 @@ export class ProductsComponent implements OnChanges, OnInit {
       queryParams: { page: this.currentPage },
       queryParamsHandling: 'merge', // Preserve other query parameters
     });
-
-    // Fetch products for the new page
     this.fetchProducts();
   }
 

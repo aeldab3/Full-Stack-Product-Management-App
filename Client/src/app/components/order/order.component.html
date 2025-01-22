@@ -1,24 +1,47 @@
-<input type="text" #userNameInp name="" id="" />
-<div class="mb-3">
-  <label for="categories" class="form-label">Categories</label>
-  <select
-    class="form-select form-select-lg"
-    name="categories"
-    id="categories"
-    [(ngModel)]="selectedCatId"
-  >
-    <option selected value="0">All</option>
-    <option *ngFor="let cat of categories" [value]="cat._id">
-      {{ cat.name }}
-    </option>
-  </select>
-</div>
+<div class="container mt-3">
+  <div class="row">
+    <!-- Categories Dropdown and Search Input -->
+    <section class="col-12 col-md-3">
+      <div class="mb-3">
+        <label for="search" class="form-label">Search</label>
+        <input
+          type="text"
+          class="form-control"
+          id="search"
+          placeholder="Search..."
+          [(ngModel)]="searchTerm"
+          (keyup.enter)="onSearch()"
+        />
+      </div>
 
-<div class="my-5">
-  <app-products
-    [receivedCatId]="selectedCatId"
-    (onTotalPriceChanged)="calcTotalPrice($event)"
-  >
-  </app-products>
+      <div class="mb-3">
+        <label for="categories" class="form-label">Categories</label>
+        <select
+          class="form-select form-select-lg"
+          name="categories"
+          id="categories"
+          [(ngModel)]="selectedCatId"
+          (change)="onCategoryChange()"
+        >
+          <option selected value="0">All</option>
+          <option *ngFor="let cat of categories" [value]="cat._id">
+            {{ cat.name }}
+          </option>
+        </select>
+      </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="col-12 col-md-9">
+      <div class="my-5">
+        <app-products
+          [receivedCatId]="selectedCatId"
+          [searchTerm]="searchTerm"
+          (onTotalPriceChanged)="calcTotalPrice($event)"
+        >
+        </app-products>
+      </div>
+      {{ receivedTotalPrice | currency : "EGP" }}
+    </section>
+  </div>
 </div>
-{{ receivedTotalPrice | currency : "EGP" }}

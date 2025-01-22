@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Icategory } from './../../models/icategory';
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ProductsComponent } from '../products/products.component';
+import { ApiProductsService } from '../../services/api-products.service';
 
 @Component({
   selector: 'app-order',
@@ -11,22 +12,36 @@ import { ProductsComponent } from '../products/products.component';
   templateUrl: './order.component.html',
   styleUrl: './order.component.css',
 })
-export class OrderComponent implements AfterViewInit {
-  categories: Icategory[];
-  selectedCatId: string = '';
+export class OrderComponent implements OnInit {
+  categories: Icategory[] = [];
+  selectedCatId: string = '0';
+  searchTerm: string = '';
   receivedTotalPrice: number = 0;
-  @ViewChild('userNameInp') myInp!: ElementRef;
-  constructor() {
-    this.categories = [
-      { _id: '1', name: 'Laptop' },
-      { _id: '2', name: 'Mobile' },
-      { _id: '3', name: 'Tablet' },
-    ];
+
+  @ViewChild(ProductsComponent) productsComponent!: ProductsComponent; // Access the child component
+
+  constructor(private _apiProductsService: ApiProductsService) {}
+
+  ngOnInit(): void {
+    this.fetchCategories();
   }
-  ngAfterViewInit(): void {
-    this.myInp.nativeElement.value = 'ahmed';
+
+  fetchCategories(): void {
+    this._apiProductsService.getCategories().subscribe({
+      next: (res) => {
+        this.categories = res.data.categories;
+      },
+      error: (error) => {
+        console.error('Error:', error);
+      },
+    });
   }
-  calcTotalPrice(totalPrice: number) {
+
+  onCategoryChange(): void {}
+
+  onSearch(): void {}
+
+  calcTotalPrice(totalPrice: number): void {
     this.receivedTotalPrice = totalPrice;
   }
 }

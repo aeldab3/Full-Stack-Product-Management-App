@@ -11,7 +11,7 @@ const userUpdateValidator = require("../validators/userUpdateValidator");
 const getAllUsers = asyncWrapper(
     async (req, res, next) => {
         const query = req.query;
-        const limit = query.limit || 5;
+        const limit = query.limit || 12;
         const page = query.page || 1;
         const skip = (page - 1) * limit;
         
