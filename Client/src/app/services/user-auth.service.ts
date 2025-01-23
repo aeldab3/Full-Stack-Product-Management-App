@@ -2,7 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, map, Observable, of, tap } from 'rxjs';
 import { environment } from '../../environments/environment.development';
-
+import { IloginResponse } from '../models/iLoginResponse';
+import { IRegisterResponse } from '../models/IRegisterResponse';
 @Injectable({
   providedIn: 'root',
 })
@@ -14,18 +15,20 @@ export class UserAuthService {
 
   login(email: string, password: string): Observable<boolean> {
     return this.http
-      .post<{ status: string; data: { token: string; role: string } }>(
-        `${environment.baseUrl}/users/login`,
-        {
-          email,
-          password,
-        }
-      )
+      .post<IloginResponse>(`${environment.baseUrl}/users/login`, {
+        email,
+        password,
+      })
       .pipe(
         map((res) => {
-          localStorage.setItem('token', res.data.token);
-          this.authSubject.next(true);
-          return true;
+          if (!this.isTokenExpired(res.data.token)) {
+            localStorage.setItem('token', res.data.token);
+            this.authSubject.next(true);
+            return true;
+          } else {
+            console.error('Token is already expired.');
+            return false;
+          }
         }),
         catchError((err) => {
           this.authSubject.next(false);
@@ -44,7 +47,7 @@ export class UserAuthService {
     role: string;
   }): Observable<boolean> {
     return this.http
-      .post<{ status: string; data: { user: any } }>(
+      .post<IRegisterResponse>(
         `${environment.baseUrl}/users/register`,
         userData
       )
@@ -63,9 +66,16 @@ export class UserAuthService {
     this.authSubject.next(false);
   }
 
+  private isTokenExpired(token: string): boolean {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.exp * 1000 < Date.now();
+  }
   getUserLogged(): boolean {
     if (typeof localStorage !== 'undefined') {
-      return localStorage.getItem('token') ? true : false;
+      const token = localStorage.getItem('token');
+      if (token) {
+        return token ? !this.isTokenExpired(token) : false;
+      }
     }
     return false;
   }

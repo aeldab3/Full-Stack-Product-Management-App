@@ -15,13 +15,17 @@ export class ApiProductsService {
     private _UserAuthService: UserAuthService
   ) {}
 
-  getAllProducts(queryParams: any): Observable<any> {
+  private buildQueryParams(queryParams: any) : HttpParams {
     let params = new HttpParams();
     for (const key in queryParams) {
       if (queryParams[key]) {
         params = params.append(key, queryParams[key]);
       }
     }
+    return params;
+  }
+  getAllProducts(queryParams: any): Observable<any> {
+    const params = this.buildQueryParams(queryParams);
     return this.httpClient.get<any>(`${environment.baseUrl}/products`, {
       params,
     });
@@ -36,7 +40,7 @@ export class ApiProductsService {
   }
 
   getCategories(): Observable<any> {
-    return this.httpClient.get<{ data: { categories: any } }>(
+    return this.httpClient.get<{ data: { categories: Icategory[] } }>(
       `${environment.baseUrl}/products/categories`
     );
   }

@@ -134,3 +134,9 @@
     Submit
   </button>
 </form>
+<div
+  *ngIf="errorMessage"
+  class="error-message text-danger text-center f-weight-bold"
+>
+  {{ errorMessage }}
+</div>
