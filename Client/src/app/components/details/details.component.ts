@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IProduct } from '../../models/iproduct';
-import { CommonModule, Location } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { ApiProductsService } from '../../services/api-products.service';
 
 @Component({
@@ -18,7 +18,6 @@ export class DetailsComponent implements OnInit {
   currentIdIndex: number = 0;
   constructor(
     private _activatedRoute: ActivatedRoute,
-    private _location: Location,
     private _router: Router,
     private _apiProductsService: ApiProductsService
   ) {
@@ -42,9 +41,6 @@ export class DetailsComponent implements OnInit {
         },
       });
     });
-  }
-  goBack() {
-    this._location.back();
   }
   next() {
     this.currentIdIndex = this.idsArr.findIndex((id) => id == this.id);

@@ -7,6 +7,9 @@ const bcrypt = require("bcrypt");
 const generateJWT = require("../utils/generateJWT");
 const tokenBlacklist = require("../utils/tokenBlacklist");
 const userUpdateValidator = require("../validators/userUpdateValidator");
+const sendMail = require("../config/nodemailer");
+const path = require("path");
+const fs = require("fs/promises");
 
 const getAllUsers = asyncWrapper(
     async (req, res, next) => {
@@ -99,6 +102,15 @@ const register = asyncWrapper(
         });
         const token = await generateJWT({ id: user._id, email: user.email, phones: user.phones, role: user.role})
         user.token = token;
+
+        const emailTemplatePath = path.resolve(__dirname, "../emails/registration.html");
+        const emailTemplate = (await fs.readFile(emailTemplatePath, "utf-8")).replace("{{username}}", name);
+
+        await sendMail({
+            to: email,
+            subject: "Welcome to Our Platform!",
+            html: emailTemplate,
+        });
 
         return res.status(201).json({status: httpStatusText.SUCCESS, data: {user}});
 });

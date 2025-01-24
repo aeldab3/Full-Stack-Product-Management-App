@@ -28,7 +28,7 @@ export class RegisterComponent {
     this.userRegisterForm = fb.group({
       name: [
         '',
-        [Validators.required, Validators.pattern('^([a-zA-Z0-9]{3,15})$')],
+        [Validators.required, Validators.pattern('^([a-zA-Z0-9]{3,30})$')],
       ],
       email: ['', [Validators.required, Validators.email]],
       phoneNumbers: fb.array([
@@ -93,8 +93,19 @@ export class RegisterComponent {
     return this.userRegisterForm.get('name');
   }
 
+  get email() {
+    return this.userRegisterForm.get('email');
+  }
+
   get phones() {
     return this.userRegisterForm.get('phoneNumbers') as FormArray;
+  }
+  get password() {
+    return this.userRegisterForm.get('password');
+  }
+
+  get confirmPassword() {
+    return this.userRegisterForm.get('confirmPassword');
   }
   addPhoneNum() {
     if (this.phones.length >= 2) {
@@ -103,12 +114,10 @@ export class RegisterComponent {
     }
     this.phones.push(this.fb.control('', [Validators.pattern('^[0-9]{11}$')]));
   }
-  get password() {
-    return this.userRegisterForm.get('password');
-  }
-
-  get confirmPassword() {
-    return this.userRegisterForm.get('confirmPassword');
+  removePhoneNum(index: number) {
+    if (this.phones.length > 1) {
+      this.phones.removeAt(index);
+    }
   }
 
   passwordMatchValidator = (
@@ -120,10 +129,4 @@ export class RegisterComponent {
     }
     return null;
   };
-
-  removePhoneNum(index: number) {
-    if (this.phones.length > 1) {
-      this.phones.removeAt(index);
-    }
-  }
 }

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, map, Observable, of, tap } from 'rxjs';
 import { environment } from '../../environments/environment.development';
-import { IloginResponse } from '../models/iLoginResponse';
+import { ILoginResponse } from '../models/iLoginResponse';
 import { IRegisterResponse } from '../models/IRegisterResponse';
 @Injectable({
   providedIn: 'root',
@@ -15,7 +15,7 @@ export class UserAuthService {
 
   login(email: string, password: string): Observable<boolean> {
     return this.http
-      .post<IloginResponse>(`${environment.baseUrl}/users/login`, {
+      .post<ILoginResponse>(`${environment.baseUrl}/users/login`, {
         email,
         password,
       })
@@ -52,8 +52,9 @@ export class UserAuthService {
         userData
       )
       .pipe(
-        tap((response) => {
-          if (response.status === 'SUCCESS') {
+        tap((res) => {
+          console.log('Registration response:', res);
+          if (res.status === 'SUCCESS') {
             alert('Registration successful!');
           }
         }),

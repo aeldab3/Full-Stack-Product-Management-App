@@ -16,7 +16,14 @@ import { RegisterComponent } from './components/account/register/register.compon
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
-  { path: 'order', component: OrderComponent },
+  {
+    path: 'order',
+    loadComponent: () =>
+      import('./components/order/order.component').then(
+        (obj) => obj.OrderComponent
+      ),
+    canActivate: [authGuard],
+  },
   {
     path: 'products',
     loadComponent: () =>
@@ -42,6 +49,10 @@ export const routes: Routes = [
     component: AddProductComponent,
     canActivate: [authGuard],
   },
-  { path: 'update-product/:id', component: UpdateProductComponent },
+  {
+    path: 'update-product/:id',
+    component: UpdateProductComponent,
+    canActivate: [authGuard],
+  },
   { path: '**', component: NotFoundComponent },
 ];

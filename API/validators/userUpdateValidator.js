@@ -1,7 +1,7 @@
 const Joi = require("joi")
 
 const userSchema = Joi.object({
-    name: Joi.string().pattern(new RegExp('^([a-zA-Z0-9]{3,15})$')),
+    name: Joi.string().pattern(new RegExp('^([a-zA-Z0-9]{3,30})$')),
     email: Joi.string().email(),
     password: Joi.string().pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$')),
     confirmPassword: Joi.string().valid(Joi.ref("password")).messages({

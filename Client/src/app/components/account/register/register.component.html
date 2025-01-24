@@ -31,19 +31,9 @@
       class="form-control"
       id="userEmail"
     />
-    <div
-      class="text-danger"
-      *ngIf="
-        userRegisterForm.get('email')?.invalid &&
-        userRegisterForm.get('email')?.touched
-      "
-    >
-      <p *ngIf="userRegisterForm.get('email')?.errors?.['required']">
-        The email is required
-      </p>
-      <p *ngIf="userRegisterForm.get('email')?.errors?.['email']">
-        The email is invalid
-      </p>
+    <div class="text-danger" *ngIf="email?.invalid && email?.touched">
+      <p *ngIf="email?.errors?.['required']">The email is required</p>
+      <p *ngIf="email?.errors?.['email']">The email is invalid</p>
     </div>
   </div>
 
@@ -93,8 +83,7 @@
     <div *ngIf="password?.touched && password?.errors" class="text-danger">
       <p *ngIf="password?.errors?.['required']">Password is required.</p>
       <p *ngIf="password?.errors?.['pattern']">
-        Password must contain at least 1 lowercase letter, 1 uppercase letter, 1
-        digit, 1 special character, and be at least 8 characters long.
+        Password must contain 1 lower, 1 upper, 1 digit, 1 special, 8+ chars.
       </p>
     </div>
   </div>
@@ -125,7 +114,7 @@
       Passwords match successfully!
     </span>
   </div>
-
+  <div *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</div>
   <button
     type="submit"
     class="btn btn-success w-100"
@@ -134,9 +123,3 @@
     Submit
   </button>
 </form>
-<div
-  *ngIf="errorMessage"
-  class="error-message text-danger text-center f-weight-bold"
->
-  {{ errorMessage }}
-</div>

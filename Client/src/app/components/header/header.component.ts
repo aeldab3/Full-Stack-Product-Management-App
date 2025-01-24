@@ -10,7 +10,6 @@ import { CommonModule } from '@angular/common';
 })
 export class HeaderComponent implements OnInit {
   isUserLoggedIn!: boolean;
-  userRole: string = 'user';
   constructor(
     private _userAuthService: UserAuthService,
     private router: Router
