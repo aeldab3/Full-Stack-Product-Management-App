@@ -55,12 +55,9 @@ export class ProductsComponent implements OnChanges, OnInit {
     const queryParams = {
       limit: this.limit,
       page: this.currentPage,
-      catId: this.receivedCatId === '0' ? '' : this.receivedCatId, // Send empty string for "All"
-      search: this.searchTerm, // Include search term in the query
+      catId: this.receivedCatId === '0' ? '' : this.receivedCatId,
+      search: this.searchTerm,
     };
-
-    console.log('Query Params:', queryParams); // Log the query parameters
-
     this._apiProductsService.getAllProducts(queryParams).subscribe({
       next: (res: any) => {
         if (res && res.data && res.data.products) {

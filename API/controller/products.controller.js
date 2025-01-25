@@ -23,9 +23,6 @@ const getAllProducts = asyncWrapper(async (req, res, next) => {
       filter.name = { $regex: query.search, $options: 'i' };
     }
   
-    console.log('Query Params:', query); // Log the query parameters for debugging
-    console.log('Filter:', filter); // Log the filter object for debugging
-  
     const totalProducts = await Products.countDocuments(filter);
     const products = await Products.find(filter, { "__v": 0 }).limit(limit).skip(skip);
   

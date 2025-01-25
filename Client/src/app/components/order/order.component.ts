@@ -18,8 +18,6 @@ export class OrderComponent implements OnInit {
   searchTerm: string = '';
   receivedTotalPrice: number = 0;
 
-  @ViewChild(ProductsComponent) productsComponent!: ProductsComponent; // Access the child component
-
   constructor(private _apiProductsService: ApiProductsService) {}
 
   ngOnInit(): void {

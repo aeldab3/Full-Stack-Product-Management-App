@@ -20,7 +20,7 @@ import { Router } from '@angular/router';
 })
 export class AddProductComponent implements OnInit {
   addProductForm!: FormGroup;
-  categories: { _id: string; name: string }[] = [];
+  categories: Icategory[] = [];
   constructor(
     private fb: FormBuilder,
     private _apiProductsService: ApiProductsService,

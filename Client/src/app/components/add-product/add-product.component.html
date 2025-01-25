@@ -1,105 +1,103 @@
-<div class="form-container">
-  <h1 class="mt-5">Add New Product</h1>
-  <form
-    [formGroup]="addProductForm"
-    (ngSubmit)="addNewProduct()"
-    action="/upload"
-    method="POST"
-    enctype="multipart/form-data"
-  >
-    <div class="mb-3">
-      <label for="productName" class="form-label">Name:</label>
-      <input
-        type="text"
-        id="productName"
-        class="form-control"
-        formControlName="name"
-      />
-      <div
-        *ngIf="
-          addProductForm.get('name')?.touched &&
-          addProductForm.get('name')?.invalid
-        "
-        class="text-danger"
-      >
-        <p *ngIf="addProductForm.get('name')?.errors?.['required']">
-          The name is required
-        </p>
-        <p *ngIf="addProductForm.get('name')?.errors?.['pattern']">
-          The name must be between 3 and 50 characters
-        </p>
-      </div>
-    </div>
-
-    <div class="mb-3">
-      <label for="productPrice" class="form-label">Price:</label>
-      <input
-        type="number"
-        id="productPrice"
-        class="form-control"
-        formControlName="price"
-      />
-    </div>
-
-    <div class="mb-3">
-      <label for="productQuantity" class="form-label">Quantity:</label>
-      <input
-        type="number"
-        id="productQuantity"
-        class="form-control"
-        formControlName="quantity"
-      />
-    </div>
-
-    <div class="mb-3">
-      <label for="catId" class="form-label">Category:</label>
-      <select id="catId" class="form-select" formControlName="catId">
-        <option *ngFor="let cat of categories" [value]="cat._id">
-          {{ cat.name }}
-        </option>
-      </select>
-    </div>
-
-    <div class="mb-3">
-      <label for="productDescription" class="form-label">Description:</label>
-      <textarea
-        id="productDescription"
-        class="form-control"
-        formControlName="description"
-      ></textarea>
-      <div
-        *ngIf="
-          addProductForm.get('description')?.touched &&
-          addProductForm.get('description')?.invalid
-        "
-        class="text-danger"
-      >
-        <p *ngIf="addProductForm.get('description')?.errors?.['maxLength']">
-          The description cannot exceed 200 characters
-        </p>
-      </div>
-    </div>
-
-    <div class="mb-3">
-      <label for="productImage" class="form-label">Image:</label>
-      <input
-        type="file"
-        id="productImage"
-        class="form-control"
-        formControlName="imageUrl"
-        accept="image/*"
-      />
-    </div>
-
-    <button
-      type="submit"
-      class="btn btn-primary"
-      [disabled]="addProductForm.invalid"
+<h1 class="mt-5">Add New Product</h1>
+<form
+  [formGroup]="addProductForm"
+  (ngSubmit)="addNewProduct()"
+  action="/upload"
+  method="POST"
+  enctype="multipart/form-data"
+>
+  <div class="mb-3">
+    <label for="productName" class="form-label">Name:</label>
+    <input
+      type="text"
+      id="productName"
+      class="form-control"
+      formControlName="name"
+    />
+    <div
+      *ngIf="
+        addProductForm.get('name')?.touched &&
+        addProductForm.get('name')?.invalid
+      "
+      class="text-danger"
     >
-      Submit
-    </button>
-    <button type="button" class="btn btn-secondary mx-2" (click)="onReset()">
-      Reset
-    </button>
-  </form>
-</div>
+      <p *ngIf="addProductForm.get('name')?.errors?.['required']">
+        The name is required
+      </p>
+      <p *ngIf="addProductForm.get('name')?.errors?.['pattern']">
+        The name must be between 3 and 50 characters
+      </p>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label for="productPrice" class="form-label">Price:</label>
+    <input
+      type="number"
+      id="productPrice"
+      class="form-control"
+      formControlName="price"
+    />
+  </div>
+
+  <div class="mb-3">
+    <label for="productQuantity" class="form-label">Quantity:</label>
+    <input
+      type="number"
+      id="productQuantity"
+      class="form-control"
+      formControlName="quantity"
+    />
+  </div>
+
+  <div class="mb-3">
+    <label for="catId" class="form-label">Category:</label>
+    <select id="catId" class="form-select" formControlName="catId">
+      <option *ngFor="let cat of categories" [value]="cat._id">
+        {{ cat.name }}
+      </option>
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label for="productDescription" class="form-label">Description:</label>
+    <textarea
+      id="productDescription"
+      class="form-control"
+      formControlName="description"
+    ></textarea>
+    <div
+      *ngIf="
+        addProductForm.get('description')?.touched &&
+        addProductForm.get('description')?.invalid
+      "
+      class="text-danger"
+    >
+      <p *ngIf="addProductForm.get('description')?.errors?.['maxLength']">
+        The description cannot exceed 200 characters
+      </p>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label for="productImage" class="form-label">Image:</label>
+    <input
+      type="file"
+      id="productImage"
+      class="form-control"
+      formControlName="imageUrl"
+      accept="image/*"
+    />
+  </div>
+
+  <button
+    type="submit"
+    class="btn btn-primary"
+    [disabled]="addProductForm.invalid"
+  >
+    Submit
+  </button>
+  <button type="button" class="btn btn-secondary mx-2" (click)="onReset()">
+    Reset
+  </button>
+</form>

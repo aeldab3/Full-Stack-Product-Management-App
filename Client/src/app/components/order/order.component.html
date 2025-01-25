@@ -1,9 +1,21 @@
 <div class="container mt-3">
-  <div class="row">
-    <!-- Categories Dropdown and Search Input -->
-    <section class="col-12 col-md-3">
-      <div class="mb-3">
-        <label for="search" class="form-label">Search</label>
+  <div class="row align-items-center mb-1">
+    <div class="col-12 col-md-4 mb-2">
+      <select
+        class="form-select"
+        name="categories"
+        id="categories"
+        [(ngModel)]="selectedCatId"
+        (change)="onCategoryChange()"
+      >
+        <option selected value="0">All Categories</option>
+        <option *ngFor="let cat of categories" [value]="cat._id">
+          {{ cat.name }}
+        </option>
+      </select>
+    </div>
+    <div class="col-12 col-md-8 mb-2">
+      <div class="input-group">
         <input
           type="text"
           class="form-control"
@@ -13,27 +25,11 @@
           (keyup.enter)="onSearch()"
         />
       </div>
-
-      <div class="mb-3">
-        <label for="categories" class="form-label">Categories</label>
-        <select
-          class="form-select form-select-lg"
-          name="categories"
-          id="categories"
-          [(ngModel)]="selectedCatId"
-          (change)="onCategoryChange()"
-        >
-          <option selected value="0">All</option>
-          <option *ngFor="let cat of categories" [value]="cat._id">
-            {{ cat.name }}
-          </option>
-        </select>
-      </div>
-    </section>
-
-    <!-- Products Section -->
-    <section class="col-12 col-md-9">
-      <div class="my-5">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div>
         <app-products
           [receivedCatId]="selectedCatId"
           [searchTerm]="searchTerm"
@@ -41,7 +37,7 @@
         >
         </app-products>
       </div>
-      {{ receivedTotalPrice | currency : "EGP" }}
-    </section>
+      <!-- {{ receivedTotalPrice | currency : "EGP" }} for display total price of orders -->
+    </div>
   </div>
 </div>

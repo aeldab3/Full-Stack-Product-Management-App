@@ -3,19 +3,15 @@ import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { IProduct } from '../models/iproduct';
 import { environment } from '../../environments/environment.development';
-import { UserAuthService } from './user-auth.service';
 import { Icategory } from '../models/icategory';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiProductsService {
-  constructor(
-    private httpClient: HttpClient,
-    private _UserAuthService: UserAuthService
-  ) {}
+  constructor(private httpClient: HttpClient) {}
 
-  private buildQueryParams(queryParams: any) : HttpParams {
+  private buildQueryParams(queryParams: any): HttpParams {
     let params = new HttpParams();
     for (const key in queryParams) {
       if (queryParams[key]) {
@@ -26,9 +22,21 @@ export class ApiProductsService {
   }
   getAllProducts(queryParams: any): Observable<any> {
     const params = this.buildQueryParams(queryParams);
-    return this.httpClient.get<any>(`${environment.baseUrl}/products`, {
+    return this.httpClient.get<{
+      status: string;
+      data: { products: IProduct[] };
+    }>(`${environment.baseUrl}/products`, {
       params,
     });
+  }
+
+  getAllProductsId(): Observable<String[]> {
+    const queryParams = { limit: 10000000, page: 1 };
+    return this.getAllProducts(queryParams).pipe(
+      map((res: any) =>
+        res.data.products.map((product: IProduct) => product._id)
+      )
+    );
   }
 
   getProductById(id: string): Observable<IProduct> {
@@ -52,6 +60,7 @@ export class ApiProductsService {
       params: searchString,
     });
   }
+
   addProduct(product: FormData): Observable<IProduct> {
     return this.httpClient
       .post<{ data: { product: IProduct } }>(
@@ -60,6 +69,7 @@ export class ApiProductsService {
       )
       .pipe(map((res) => res.data.product));
   }
+
   updateProduct(
     productId: string,
     updatedProduct: FormData

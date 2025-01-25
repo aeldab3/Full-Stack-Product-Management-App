@@ -8,7 +8,6 @@
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
 }
 
-/* Image Container */
 .image {
   position: relative;
   overflow: hidden;
@@ -32,20 +31,17 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px; /* Add space between buttons */
+  gap: 10px;
 }
 
 .image:hover .hover-overlay {
   opacity: 1;
 }
 
-/* Buttons Inside Overlay */
 .hover-overlay button {
   z-index: 1000;
   transition: all 0.5s;
   opacity: 0;
-  width: 40%; /* Adjust button width */
-  height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -64,20 +60,13 @@
   transform: translateX(0);
 }
 
-/* Button Styling */
 .btn {
   width: 30%;
   height: 40px;
-  font-size: 0.9rem;
+  font-size: 16 px;
   font-weight: 500;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
 }
 .pagination .btn {
-  width: 5%;
-}
-
-/* Disabled Button */
-.btn:disabled {
-  background-color: #ccc;
-  border-color: #ccc;
-  cursor: not-allowed;
+  width: 15%;
 }

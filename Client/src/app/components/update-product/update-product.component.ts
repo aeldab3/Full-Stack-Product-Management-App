@@ -1,8 +1,8 @@
+import { Icategory } from './../../models/icategory';
 import { Component, OnInit } from '@angular/core';
 import { ApiProductsService } from '../../services/api-products.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { IProduct } from '../../models/iproduct';
-import { Icategory } from '../../models/icategory';
 import {
   FormBuilder,
   FormGroup,
@@ -19,7 +19,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './update-product.component.css',
 })
 export class UpdateProductComponent implements OnInit {
-  categories: { _id: string; name: string }[] = [];
+  categories: Icategory[] = [];
   product: IProduct = {} as IProduct;
   updateProductForm: FormGroup;
   constructor(

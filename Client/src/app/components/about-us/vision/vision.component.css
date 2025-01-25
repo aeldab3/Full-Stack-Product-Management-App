@@ -1,6 +1,3 @@
-.container {
-  height: calc(100vh - 294px);
-}
 img {
   max-width: 50%;
   display: flex;

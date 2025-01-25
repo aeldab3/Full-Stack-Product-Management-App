@@ -6,11 +6,12 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, RouterLink],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
@@ -41,7 +42,7 @@ export class LoginComponent {
       .subscribe((isAuthenticated) => {
         if (isAuthenticated) {
           this.isUserLogged = this._userAuthService.getUserLogged();
-          this.router.navigate(['/products']);
+          this.router.navigate(['/order']);
         } else {
           this.errorMessage = 'Invalid credentials. Please try again.';
         }
