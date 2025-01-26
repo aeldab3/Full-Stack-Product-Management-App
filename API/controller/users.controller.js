@@ -14,7 +14,7 @@ const fs = require("fs/promises");
 const getAllUsers = asyncWrapper(
     async (req, res, next) => {
         const query = req.query;
-        const limit = query.limit || 12;
+        const limit = query.limit || 18;
         const page = query.page || 1;
         const skip = (page - 1) * limit;
         
@@ -129,7 +129,7 @@ const login = asyncWrapper(
         if (!isValidPassword) {
             return next(new AppError("Invalid password", 401, httpStatusText.FAIL));
         }
-        const token = await generateJWT({ id: user._id, email: user.email, role: user.role})
+        const token = await generateJWT({ id: user._id, name: user.name, email: user.email, role: user.role})
         return res.json({status: httpStatusText.SUCCESS, data: {token, role: user.role}});
     }
 )

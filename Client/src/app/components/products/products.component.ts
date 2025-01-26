@@ -26,7 +26,7 @@ export class ProductsComponent implements OnChanges, OnInit {
   totalOrderPrice: number = 0;
   currentPage: number = 1;
   totalPages: number = 1;
-  limit: number = 12;
+  limit: number = 18;
 
   @Input() receivedCatId: string = '0';
   @Input() searchTerm: string = '';

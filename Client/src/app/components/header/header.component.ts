@@ -10,6 +10,8 @@ import { CommonModule } from '@angular/common';
 })
 export class HeaderComponent implements OnInit {
   isUserLoggedIn!: boolean;
+  name!: string;
+  cartCount = 0;
   constructor(
     private _userAuthService: UserAuthService,
     private router: Router
@@ -18,8 +20,12 @@ export class HeaderComponent implements OnInit {
     this._userAuthService.getAuthSubject().subscribe({
       next: (response) => {
         this.isUserLoggedIn = response;
+        if (this.isUserLoggedIn) {
+          this.name = this._userAuthService.getUserName() || 'user';
+        }
       },
     });
+    this.cartCount = 3;
   }
   logout(): void {
     let confirmation = confirm('Are you sure you want to logout?');
@@ -28,7 +34,7 @@ export class HeaderComponent implements OnInit {
       this.isUserLoggedIn = this._userAuthService.getUserLogged();
       this.router.navigate(['/login']);
     } else {
-      this.router.navigate(['/products']);
+      this.router.navigate(['/order']);
     }
   }
 }
