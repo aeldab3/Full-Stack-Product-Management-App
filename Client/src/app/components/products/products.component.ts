@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { IProduct } from '../../models/iproduct';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiProductsService } from '../../services/api-products.service';
+import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-products',
@@ -27,6 +28,7 @@ export class ProductsComponent implements OnChanges, OnInit {
   currentPage: number = 1;
   totalPages: number = 1;
   limit: number = 18;
+  cartCount: number = 0;
 
   @Input() receivedCatId: string = '0';
   @Input() searchTerm: string = '';
@@ -34,7 +36,8 @@ export class ProductsComponent implements OnChanges, OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private _apiProductsService: ApiProductsService
+    private _apiProductsService: ApiProductsService,
+    private cartService: CartService
   ) {
     this.filteredProducts = this.products;
     this.onTotalPriceChanged = new EventEmitter<number>();
@@ -95,9 +98,15 @@ export class ProductsComponent implements OnChanges, OnInit {
   }
 
   buy(count: string, price: number) {
-    this.totalOrderPrice += parseInt(count) * price;
+    const requestQuantity = parseInt(count);
+    this.cartCount += requestQuantity;
+
+    this.totalOrderPrice += requestQuantity * price;
     this.onTotalPriceChanged.emit(this.totalOrderPrice);
+
+    this.cartService.updateCartCount(this.cartCount);
   }
+
   decrementQuantity(product: IProduct, count: string) {
     const requestQuantity = parseInt(count);
     if (requestQuantity > product.quantity) {

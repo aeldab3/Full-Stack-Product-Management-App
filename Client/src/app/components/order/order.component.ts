@@ -4,6 +4,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ProductsComponent } from '../products/products.component';
 import { ApiProductsService } from '../../services/api-products.service';
+import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-order',
@@ -17,11 +18,18 @@ export class OrderComponent implements OnInit {
   selectedCatId: string = '0';
   searchTerm: string = '';
   receivedTotalPrice: number = 0;
+  cartCount: number = 0;
 
-  constructor(private _apiProductsService: ApiProductsService) {}
+  constructor(
+    private _apiProductsService: ApiProductsService,
+    private cartService: CartService
+  ) {}
 
   ngOnInit(): void {
     this.fetchCategories();
+    this.cartService.getCartCount().subscribe((count) => {
+      this.cartCount = count;
+    });
   }
 
   fetchCategories(): void {

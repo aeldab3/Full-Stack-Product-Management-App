@@ -1,103 +1,107 @@
-<h1 class="mt-5">Edit Product</h1>
-<form
-  [formGroup]="updateProductForm"
-  (ngSubmit)="updateProduct()"
-  class="mt-5"
-  enctype="multipart/form-data"
->
-  <div class="mb-3">
-    <label for="productName" class="form-label">Name:</label>
-    <input
-      type="text"
-      id="productName"
-      class="form-control"
-      formControlName="name"
-    />
-    <div
-      class="text-danger"
-      *ngIf="
-        updateProductForm.get('name')?.touched &&
-        updateProductForm.get('name')?.invalid
-      "
-    >
-      <p *ngIf="updateProductForm.get('name')?.errors?.['required']">
-        The name is required
-      </p>
-      <p *ngIf="updateProductForm.get('name')?.errors?.['pattern']">
-        The name must be between 3 and 50 characters
-      </p>
-    </div>
-  </div>
-
-  <div class="mb-3">
-    <label for="productPrice" class="form-label">Price:</label>
-    <input
-      type="number"
-      id="productPrice"
-      class="form-control"
-      formControlName="price"
-    />
-    <span
-      class="text-danger"
-      *ngIf="
-        updateProductForm.get('price')?.invalid &&
-        updateProductForm.get('price')?.touched
-      "
-    ></span>
-  </div>
-
-  <div class="mb-3">
-    <label for="productDescription" class="form-label">Description:</label>
-    <input
-      type="text"
-      id="productDescription"
-      class="form-control"
-      formControlName="description"
-    />
-    <span
-      class="text-danger"
-      *ngIf="
-        updateProductForm.get('description')?.invalid &&
-        updateProductForm.get('description')?.touched
-      "
-    ></span>
-  </div>
-
-  <div class="mb-3">
-    <label for="productQuantity" class="form-label">Quantity:</label>
-    <input
-      type="number"
-      id="productQuantity"
-      class="form-control"
-      formControlName="quantity"
-    />
-  </div>
-
-  <div class="mb-3">
-    <label for="productImage" class="form-label">Image:</label>
-    <input
-      type="file"
-      id="productImage"
-      class="form-control"
-      accept="image/*"
-    />
-  </div>
-
-  <div class="mb-3">
-    <label for="productCategory" class="form-label">Category:</label>
-    <select id="productCategory" class="form-select" formControlName="catId">
-      <option *ngFor="let cat of categories" [value]="cat._id">
-        {{ cat.name }}
-      </option>
-    </select>
-  </div>
-
-  <button
-    type="submit"
-    class="btn btn-primary"
-    [disabled]="updateProductForm.invalid"
+<div class="container mt-5">
+  <h1 class="text-center">Edit Product</h1>
+  <form
+    [formGroup]="updateProductForm"
+    (ngSubmit)="updateProduct()"
+    class="mt-5"
+    enctype="multipart/form-data"
   >
-    Save Changes
-  </button>
-  <button class="btn btn-secondary mx-2" routerLink="/products">Return</button>
-</form>
+    <div class="mb-3">
+      <label for="productName" class="form-label">Name:</label>
+      <input
+        type="text"
+        id="productName"
+        class="form-control"
+        formControlName="name"
+      />
+      <div
+        class="text-danger"
+        *ngIf="
+          updateProductForm.get('name')?.touched &&
+          updateProductForm.get('name')?.invalid
+        "
+      >
+        <p *ngIf="updateProductForm.get('name')?.errors?.['required']">
+          The name is required
+        </p>
+        <p *ngIf="updateProductForm.get('name')?.errors?.['pattern']">
+          The name must be between 3 and 50 characters
+        </p>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="productPrice" class="form-label">Price:</label>
+      <input
+        type="number"
+        id="productPrice"
+        class="form-control"
+        formControlName="price"
+      />
+      <span
+        class="text-danger"
+        *ngIf="
+          updateProductForm.get('price')?.invalid &&
+          updateProductForm.get('price')?.touched
+        "
+      ></span>
+    </div>
+
+    <div class="mb-3">
+      <label for="productDescription" class="form-label">Description:</label>
+      <input
+        type="text"
+        id="productDescription"
+        class="form-control"
+        formControlName="description"
+      />
+      <span
+        class="text-danger"
+        *ngIf="
+          updateProductForm.get('description')?.invalid &&
+          updateProductForm.get('description')?.touched
+        "
+      ></span>
+    </div>
+
+    <div class="mb-3">
+      <label for="productQuantity" class="form-label">Quantity:</label>
+      <input
+        type="number"
+        id="productQuantity"
+        class="form-control"
+        formControlName="quantity"
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="productImage" class="form-label">Image:</label>
+      <input
+        type="file"
+        id="productImage"
+        class="form-control"
+        accept="image/*"
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="productCategory" class="form-label">Category:</label>
+      <select id="productCategory" class="form-select" formControlName="catId">
+        <option *ngFor="let cat of categories" [value]="cat._id">
+          {{ cat.name }}
+        </option>
+      </select>
+    </div>
+
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [disabled]="updateProductForm.invalid"
+    >
+      Save Changes
+    </button>
+    <button class="btn btn-secondary mx-2" routerLink="/products">
+      Return
+    </button>
+  </form>
+</div>

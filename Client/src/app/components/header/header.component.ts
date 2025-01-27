@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { UserAuthService } from '../../services/user-auth.service';
 import { CommonModule } from '@angular/common';
+import { CartService } from '../../services/cart.service';
 @Component({
   selector: 'app-header',
   imports: [RouterLink, RouterLinkActive, CommonModule],
@@ -11,10 +12,11 @@ import { CommonModule } from '@angular/common';
 export class HeaderComponent implements OnInit {
   isUserLoggedIn!: boolean;
   name!: string;
-  cartCount = 0;
+  cartCount: number = 0;
   constructor(
     private _userAuthService: UserAuthService,
-    private router: Router
+    private router: Router,
+    private cartService: CartService
   ) {}
   ngOnInit(): void {
     this._userAuthService.getAuthSubject().subscribe({
@@ -25,7 +27,9 @@ export class HeaderComponent implements OnInit {
         }
       },
     });
-    this.cartCount = 3;
+    this.cartService.getCartCount().subscribe((count) => {
+      this.cartCount = count;
+    });
   }
   logout(): void {
     let confirmation = confirm('Are you sure you want to logout?');
