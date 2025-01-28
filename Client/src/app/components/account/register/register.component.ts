@@ -55,6 +55,7 @@ export class RegisterComponent {
       this.errorMessage = 'Please fill in all required fields correctly.';
       return;
     }
+    this.errorMessage = null;
     const { name, email, phoneNumbers, password, confirmPassword } =
       this.userRegisterForm.value;
 

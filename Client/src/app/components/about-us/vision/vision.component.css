@@ -1,5 +1,39 @@
-img {
+.vision-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 40px;
+  border-radius: 15px;
+  max-width: 1600px;
+  margin: 40px auto;
+}
+.vision-content h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #8f9dc3;
+}
+.vision-content p {
+  font-size: 1.5rem;
+  color: #333;
+  line-height: 1.6;
+}
+.vision-image {
   max-width: 50%;
   display: flex;
   margin: 20px auto;
+}
+@media (max-width: 768px) {
+  .vision-container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .vision-content, .vision-image {
+    width: 100%;
+  }
+
+  .vision-image img {
+    max-width: 100%;
+  }
+
 }

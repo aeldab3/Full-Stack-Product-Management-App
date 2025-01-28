@@ -2,3 +2,20 @@
 * {
   box-sizing: border-box;
 }
+body {
+  background-color: #f0f1f5;
+}
+
+.btn-primary {
+  background-color: #8f9dc3 !important;
+  color: #fff;
+  border: none;
+}
+.btn-primary:hover {
+  background-color: #8995b9 !important;
+  color: #fff;
+}
+.btn.active {
+  background-color: #8f9dc3 !important;
+  border: none;
+}

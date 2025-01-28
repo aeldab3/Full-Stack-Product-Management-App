@@ -1,0 +1,20 @@
+.values {
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+li {
+  background-color: #f0f1f5;
+  margin: 10px 0;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.5rem;
+  color: #333;
+  line-height: 1.5;
+  box-shadow: 2 2px 4px rgba(0, 0, 0, 0.1);
+}
+h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #8f9dc3;
+}

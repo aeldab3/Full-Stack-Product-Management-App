@@ -45,6 +45,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  color: #fff;
 }
 
 .hover-overlay button:first-of-type {
@@ -69,4 +70,12 @@
 }
 .pagination .btn {
   width: 15%;
+}
+.btn-outline-primary {
+  border-color: #8f9dc3;
+  color: #8f9dc3;
+}
+.btn-outline-primary:hover {
+  background-color: #8f9dc3;
+  color: #fff;
 }
