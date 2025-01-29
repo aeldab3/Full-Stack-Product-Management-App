@@ -10,6 +10,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-register',
@@ -75,10 +76,23 @@ export class RegisterComponent {
       .subscribe(
         (success) => {
           if (success) {
-            alert('Registration successful!');
-            this.router.navigate(['/login']);
+            swal
+              .fire({
+                icon: 'success',
+                title: 'Success',
+                text: 'Registration successful.',
+                showConfirmButton: false,
+                timer: 2000,
+              })
+              .then(() => {
+                this.router.navigate(['/login']);
+              });
           } else {
-            this.errorMessage = 'Registration failed. Please try again.';
+            swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Registration failed, please try to use another email or name or phone and try again.',
+            });
           }
         },
         (error) => {
@@ -110,7 +124,11 @@ export class RegisterComponent {
   }
   addPhoneNum() {
     if (this.phones.length >= 2) {
-      alert('You can have a maximum of 2 phone numbers.');
+      swal.fire({
+        icon: 'warning',
+        title: 'Warning',
+        text: 'You can only add up to 2 phone numbers.',
+      });
       return;
     }
     this.phones.push(this.fb.control('', [Validators.pattern('^[0-9]{11}$')]));

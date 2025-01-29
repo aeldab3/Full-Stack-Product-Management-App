@@ -11,7 +11,7 @@ import {
 import { IProduct } from '../../models/iproduct';
 import { ApiProductsService } from '../../services/api-products.service';
 import { Router } from '@angular/router';
-
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-add-product',
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
@@ -72,22 +72,41 @@ export class AddProductComponent implements OnInit {
       if (file) {
         formData.append('imageUrl', file);
       } else {
-        alert('Please select an image file');
+        Swal.fire({
+          icon: 'warning',
+          title: 'Missing Image',
+          text: 'Please select an image file',
+        });
         return;
       }
 
       this._apiProductsService.addProduct(formData).subscribe({
         next: () => {
-          alert('Product added successfully');
-          this.router.navigate(['/products']);
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'The product has been added successfully!',
+            showConfirmButton: false,
+            timer: 2000,
+          }).then(() => {
+            this.router.navigate(['/products']);
+          });
         },
         error: (err) => {
           console.error('Error adding product:', err);
-          alert('Failed to add the product. Please try again.');
+          Swal.fire({
+            icon: 'error',
+            title: 'Failed',
+            text: 'Failed to add the product. Please try again.',
+          });
         },
       });
     } else {
-      alert('Please fill in all required fields correctly.');
+      Swal.fire({
+        icon: 'error',
+        title: 'Invalid Form',
+        text: 'Please fill in all required fields correctly.',
+      });
     }
   }
   onReset() {

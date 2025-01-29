@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Icategory } from './../../models/icategory';
+import { Icategory } from '../../models/icategory';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ProductsComponent } from '../products/products.component';
@@ -7,13 +7,13 @@ import { ApiProductsService } from '../../services/api-products.service';
 import { CartService } from '../../services/cart.service';
 
 @Component({
-  selector: 'app-order',
+  selector: 'app-shop',
   imports: [CommonModule, FormsModule, ProductsComponent],
   standalone: true,
-  templateUrl: './order.component.html',
-  styleUrl: './order.component.css',
+  templateUrl: './shop.component.html',
+  styleUrl: './shop.component.css',
 })
-export class OrderComponent implements OnInit {
+export class ShopComponent implements OnInit {
   categories: Icategory[] = [];
   selectedCatId: string = '0';
   searchTerm: string = '';

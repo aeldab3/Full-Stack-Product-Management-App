@@ -11,6 +11,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-update-product',
@@ -89,16 +90,30 @@ export class UpdateProductComponent implements OnInit {
         .updateProduct(this.product._id, updatedProduct)
         .subscribe({
           next: () => {
-            alert('Product updated successfully');
+            Swal.fire({
+              icon: 'success',
+              title: 'Success',
+              text: 'Product Updated Successfully',
+              showConfirmButton: false,
+              timer: 2000,
+            });
             this.router.navigate(['/products']);
           },
           error: (err) => {
             console.error(err.message);
-            alert('Failed to update product. Please try again.');
+            Swal.fire({
+              title: 'Error!',
+              text: 'Failed to update product. Please try again.',
+              icon: 'error',
+            });
           },
         });
     } else {
-      alert('Please fill in all required fields correctly.');
+      Swal.fire({
+        title: 'Invalid Input',
+        text: 'Please fill in all required fields correctly.',
+        icon: 'warning',
+      });
     }
   }
 }

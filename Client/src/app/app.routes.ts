@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
-import { ProductsComponent } from './components/products/products.component';
 import { AboutUsComponent } from './components/about-us/about-us.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { VisionComponent } from './components/about-us/vision/vision.component';
@@ -10,17 +9,16 @@ import { LoginComponent } from './components/account/login/login.component';
 import { authGuard } from './guards/auth.guard';
 import { AddProductComponent } from './components/add-product/add-product.component';
 import { UpdateProductComponent } from './components/update-product/update-product.component';
-import { OrderComponent } from './components/order/order.component';
 import { RegisterComponent } from './components/account/register/register.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
   {
-    path: 'order',
+    path: 'shop',
     loadComponent: () =>
-      import('./components/order/order.component').then(
-        (obj) => obj.OrderComponent
+      import('./components/shop/shop.component').then(
+        (obj) => obj.ShopComponent
       ),
     canActivate: [authGuard],
   },

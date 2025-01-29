@@ -13,7 +13,7 @@ import { IProduct } from '../../models/iproduct';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiProductsService } from '../../services/api-products.service';
 import { CartService } from '../../services/cart.service';
-
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-products',
   imports: [FormsModule, CommonModule],
@@ -117,19 +117,35 @@ export class ProductsComponent implements OnChanges, OnInit {
   }
 
   deleteProduct(id: string) {
-    const confirmation = confirm(
-      'Are you sure you want to delete this product?'
-    );
-    if (!confirmation) return;
-    this._apiProductsService.deleteProduct(id).subscribe({
-      next: () => {
-        this.filteredProducts = this.filteredProducts.filter(
-          (product) => product._id !== id
-        );
-      },
-      error: (err) => {
-        console.error(err.message);
-      },
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#8f9dc3',
+      confirmButtonText: 'Yes, delete it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this._apiProductsService.deleteProduct(id).subscribe({
+          next: () => {
+            this.filteredProducts = this.filteredProducts.filter(
+              (product) => product._id !== id
+            );
+            Swal.fire({
+              title: 'Deleted!',
+              text: 'Your product has been deleted.',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          },
+          error: (err) => {
+            console.error(err.message);
+            Swal.fire('Error', err.message, 'error');
+          },
+        });
+      }
     });
   }
   navigateToDetails(id: string) {
